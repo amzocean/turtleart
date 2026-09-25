@@ -42,11 +42,13 @@
                     <button class="preset-item" data-preset="5">5. Make a Square</button>
                     <button class="preset-item" data-preset="6">6. Draw the Letter A</button>
                     <button class="preset-item" data-preset="7">7. Build a House</button>
-                    <button class="preset-item" data-preset="8">8. Design a Rocket</button>
                     <button class="preset-item" data-preset="9">9. Nested Diamonds</button>
                     <button class="preset-item" data-preset="10">10. Eight-Point Ring</button>
-                    <button class="preset-item" data-preset="11">11. Symmetric Pattern</button>
-                    <button class="preset-item" data-preset="12">12. Free-Design Coordinate Art</button>
+                    <hr style="margin: 10px 0; border: none; border-top: 1px solid #eee;">
+                    <button class="preset-item" data-preset="13">🌸 Single Circle</button>
+                    <button class="preset-item" data-preset="14">🌸 Two Circles</button>
+                    <button class="preset-item" data-preset="15">🌸 6-Petal Flower</button>
+                    <button class="preset-item" data-preset="16">🌸 12-Petal Mandala</button>
                 </div>
             </div>
         </header>
@@ -72,6 +74,25 @@
                         <input type="number" id="gotoY" value="0" min="-100" max="100">
                     </div>
                     <button id="gotoBtn" class="cmd-btn wide">Add Go To</button>
+                </div>
+
+                <div class="command-section">
+                    <h3>Circle</h3>
+                    <div class="input-group">
+                        <label>Radius:</label>
+                        <input type="number" id="circleRadius" value="50" min="5" max="100">
+                    </div>
+                    <button id="circleBtn" class="cmd-btn wide">Add Circle</button>
+                </div>
+
+                <div class="command-section">
+                    <h3>Turn</h3>
+                    <div class="input-group">
+                        <label>Angle:</label>
+                        <input type="number" id="turnAngle" value="90" min="-360" max="360">
+                    </div>
+                    <button id="turnLeftBtn" class="cmd-btn">Turn Left</button>
+                    <button id="turnRightBtn" class="cmd-btn">Turn Right</button>
                 </div>
 
                 <div class="command-section">

@@ -8,13 +8,19 @@ class TurtleArtBuilder {
     this.commands = [];
     this.currentColor = 'black';
     
+    // Turtle state for rendering
+    this.turtleX = 0;
+    this.turtleY = 0;
+    this.turtleHeading = 90; // degrees, 90 = up/north
+    this.penIsDown = true;
+    
     // Canvas setup
     this.canvasWidth = this.canvas.width;
     this.canvasHeight = this.canvas.height;
     this.centerX = this.canvasWidth / 2;
     this.centerY = this.canvasHeight / 2;
     
-    // Scaling: 50 pixels = 1 coordinate unit
+    // Scaling: coordinate units to pixels
     this.scale = 2.5; // pixels per coordinate unit
     
     this.initializeEventListeners();
@@ -81,6 +87,29 @@ class TurtleArtBuilder {
       const x = parseInt(document.getElementById('gotoX').value);
       const y = parseInt(document.getElementById('gotoY').value);
       this.addCommand('goto', x, y);
+    });
+    
+    // Circle button
+    document.getElementById('circleBtn').addEventListener('click', () => {
+      const radius = parseInt(document.getElementById('circleRadius').value);
+      if (!isNaN(radius) && radius > 0) {
+        this.addCommand('circle', radius);
+      }
+    });
+    
+    // Turn buttons
+    document.getElementById('turnLeftBtn').addEventListener('click', () => {
+      const angle = parseInt(document.getElementById('turnAngle').value);
+      if (!isNaN(angle)) {
+        this.addCommand('turnleft', angle);
+      }
+    });
+    
+    document.getElementById('turnRightBtn').addEventListener('click', () => {
+      const angle = parseInt(document.getElementById('turnAngle').value);
+      if (!isNaN(angle)) {
+        this.addCommand('turnright', angle);
+      }
     });
     
     // Allow Enter key in goto inputs
@@ -181,6 +210,12 @@ class TurtleArtBuilder {
         return 'pendown()';
       case 'goto':
         return `goto(${cmd.arg1}, ${cmd.arg2})`;
+      case 'circle':
+        return `circle(${cmd.arg1})`;
+      case 'turnleft':
+        return `left(${cmd.arg1})`;
+      case 'turnright':
+        return `right(${cmd.arg1})`;
       case 'pencolor':
         return `pencolor("${cmd.arg1}")`;
       default:
@@ -221,6 +256,15 @@ class TurtleArtBuilder {
           break;
         case 'goto':
           lines.push(`t.goto(${cmd.arg1}, ${cmd.arg2})`);
+          break;
+        case 'circle':
+          lines.push(`t.circle(${cmd.arg1})`);
+          break;
+        case 'turnleft':
+          lines.push(`t.left(${cmd.arg1})`);
+          break;
+        case 'turnright':
+          lines.push(`t.right(${cmd.arg1})`);
           break;
         case 'pencolor':
           lines.push(`t.pencolor("${cmd.arg1}")`);
@@ -338,6 +382,56 @@ class TurtleArtBuilder {
         { type: 'goto', arg1: -100, arg2: 0 },
         { type: 'goto', arg1: -70, arg2: 70 },
         { type: 'goto', arg1: 0, arg2: 100 }
+      ],
+      '13': [
+        { type: 'pendown' },
+        { type: 'circle', arg1: 40 }
+      ],
+      '14': [
+        { type: 'pendown' },
+        { type: 'circle', arg1: 40 },
+        { type: 'turnright', arg1: 60 },
+        { type: 'circle', arg1: 40 }
+      ],
+      '15': [
+        { type: 'pendown' },
+        { type: 'circle', arg1: 50 },
+        { type: 'turnright', arg1: 60 },
+        { type: 'circle', arg1: 50 },
+        { type: 'turnright', arg1: 60 },
+        { type: 'circle', arg1: 50 },
+        { type: 'turnright', arg1: 60 },
+        { type: 'circle', arg1: 50 },
+        { type: 'turnright', arg1: 60 },
+        { type: 'circle', arg1: 50 },
+        { type: 'turnright', arg1: 60 },
+        { type: 'circle', arg1: 50 }
+      ],
+      '16': [
+        { type: 'pendown' },
+        { type: 'circle', arg1: 50 },
+        { type: 'turnright', arg1: 30 },
+        { type: 'circle', arg1: 50 },
+        { type: 'turnright', arg1: 30 },
+        { type: 'circle', arg1: 50 },
+        { type: 'turnright', arg1: 30 },
+        { type: 'circle', arg1: 50 },
+        { type: 'turnright', arg1: 30 },
+        { type: 'circle', arg1: 50 },
+        { type: 'turnright', arg1: 30 },
+        { type: 'circle', arg1: 50 },
+        { type: 'turnright', arg1: 30 },
+        { type: 'circle', arg1: 50 },
+        { type: 'turnright', arg1: 30 },
+        { type: 'circle', arg1: 50 },
+        { type: 'turnright', arg1: 30 },
+        { type: 'circle', arg1: 50 },
+        { type: 'turnright', arg1: 30 },
+        { type: 'circle', arg1: 50 },
+        { type: 'turnright', arg1: 30 },
+        { type: 'circle', arg1: 50 },
+        { type: 'turnright', arg1: 30 },
+        { type: 'circle', arg1: 50 }
       ]
     };
 
@@ -384,8 +478,9 @@ class TurtleArtBuilder {
     this.ctx.lineTo(this.centerX, this.canvasHeight);
     this.ctx.stroke();
     
-    // Execute commands
+    // Execute commands with turtle state
     let x = 0, y = 0;
+    let heading = 90; // 0=right, 90=up, 180=left, 270=down
     let penIsDown = false;
     let penColor = 'black';
     
@@ -418,6 +513,16 @@ class TurtleArtBuilder {
         
         x = newX;
         y = newY;
+      } else if (cmd.type === 'circle') {
+        const radius = cmd.arg1;
+        this.drawCircle(x, y, radius, heading, penIsDown, penColor);
+        // After drawing circle, turtle moves along heading direction
+        x += radius * 2 * Math.cos((heading - 90) * Math.PI / 180);
+        y += radius * 2 * Math.sin((heading - 90) * Math.PI / 180);
+      } else if (cmd.type === 'turnleft') {
+        heading += cmd.arg1;
+      } else if (cmd.type === 'turnright') {
+        heading -= cmd.arg1;
       } else if (cmd.type === 'pencolor') {
         penColor = cmd.arg1;
       }
@@ -430,6 +535,24 @@ class TurtleArtBuilder {
     this.ctx.beginPath();
     this.ctx.arc(curScreenX, curScreenY, 5, 0, Math.PI * 2);
     this.ctx.fill();
+  }
+  
+  drawCircle(centerX, centerY, radius, heading, penIsDown, penColor) {
+    // Convert heading to radians (turtle heading: 90=up, 0=right)
+    const headingRad = heading * Math.PI / 180;
+    
+    const screenCenterX = this.centerX + centerX * this.scale;
+    const screenCenterY = this.centerY - centerY * this.scale;
+    const screenRadius = radius * this.scale;
+    
+    if (penIsDown) {
+      this.ctx.strokeStyle = penColor;
+      this.ctx.beginPath();
+      // Turtle draws circle counterclockwise
+      const startAngle = (headingRad + Math.PI / 2) % (Math.PI * 2);
+      this.ctx.arc(screenCenterX, screenCenterY, screenRadius, startAngle, startAngle + Math.PI * 2, false);
+      this.ctx.stroke();
+    }
   }
 }
 
