@@ -443,17 +443,21 @@ class TurtleArtBuilder {
       ],
       '18': [
         { type: 'penup' },
+        { type: 'goto', arg1: -30, arg2: 50 },
+        { type: 'pendown' },
+        { type: 'goto', arg1: -30, arg2: -50 },
+        { type: 'penup' },
+        { type: 'goto', arg1: -30, arg2: 0 },
+        { type: 'pendown' },
+        { type: 'goto', arg1: 0, arg2: 0 },
+        { type: 'penup' },
         { type: 'goto', arg1: 0, arg2: 50 },
         { type: 'pendown' },
         { type: 'goto', arg1: 0, arg2: -50 },
         { type: 'penup' },
-        { type: 'goto', arg1: 0, arg2: 0 },
+        { type: 'goto', arg1: 30, arg2: 50 },
         { type: 'pendown' },
-        { type: 'goto', arg1: 30, arg2: 0 },
-        { type: 'penup' },
-        { type: 'goto', arg1: 60, arg2: 50 },
-        { type: 'pendown' },
-        { type: 'goto', arg1: 60, arg2: -50 }
+        { type: 'goto', arg1: 30, arg2: -50 }
       ]
     };
 
