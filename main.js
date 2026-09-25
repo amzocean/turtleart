@@ -440,6 +440,20 @@ class TurtleArtBuilder {
         { type: 'circle', arg1: 50 },
         { type: 'pencolor', arg1: 'blue' },
         { type: 'circle', arg1: 70 }
+      ],
+      '18': [
+        { type: 'penup' },
+        { type: 'goto', arg1: 0, arg2: 50 },
+        { type: 'pendown' },
+        { type: 'goto', arg1: 0, arg2: -50 },
+        { type: 'penup' },
+        { type: 'goto', arg1: 0, arg2: 0 },
+        { type: 'pendown' },
+        { type: 'goto', arg1: 30, arg2: 0 },
+        { type: 'penup' },
+        { type: 'goto', arg1: 60, arg2: 50 },
+        { type: 'pendown' },
+        { type: 'goto', arg1: 60, arg2: -50 }
       ]
     };
 
