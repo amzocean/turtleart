@@ -21,6 +21,57 @@ class TurtleArtBuilder {
   }
 
   initializeEventListeners() {
+    // Presets
+    const CORRECT_PIN = '2342';
+    let presetsUnlocked = false;
+
+    document.getElementById('presetsBtn').addEventListener('click', () => {
+      if (!presetsUnlocked) {
+        document.getElementById('pinModal').classList.remove('hidden');
+        document.getElementById('pinInput').focus();
+      } else {
+        const dropdown = document.getElementById('presetsDropdown');
+        dropdown.classList.toggle('hidden');
+      }
+    });
+
+    document.getElementById('pinSubmitBtn').addEventListener('click', () => {
+      const pin = document.getElementById('pinInput').value;
+      if (pin === CORRECT_PIN) {
+        presetsUnlocked = true;
+        document.getElementById('pinModal').classList.add('hidden');
+        document.getElementById('pinInput').value = '';
+        document.getElementById('presetsDropdown').classList.remove('hidden');
+      } else {
+        alert('Incorrect PIN');
+        document.getElementById('pinInput').value = '';
+      }
+    });
+
+    document.getElementById('pinCancelBtn').addEventListener('click', () => {
+      document.getElementById('pinModal').classList.add('hidden');
+      document.getElementById('pinInput').value = '';
+    });
+
+    document.getElementById('pinInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        document.getElementById('pinSubmitBtn').click();
+      }
+    });
+
+    document.getElementById('closePresetsBtn').addEventListener('click', () => {
+      document.getElementById('presetsDropdown').classList.add('hidden');
+    });
+
+    // Preset items
+    document.querySelectorAll('.preset-item').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const preset = e.target.dataset.preset;
+        this.loadPreset(preset);
+        document.getElementById('presetsDropdown').classList.add('hidden');
+      });
+    });
+
     // Command buttons
     document.getElementById('penUpBtn').addEventListener('click', () => this.addCommand('penup'));
     document.getElementById('penDownBtn').addEventListener('click', () => this.addCommand('pendown'));
@@ -195,6 +246,106 @@ class TurtleArtBuilder {
     }).catch(() => {
       alert('Failed to copy. Please try again.');
     });
+  }
+
+  loadPreset(presetNum) {
+    this.clear();
+    const presets = {
+      '1': [
+        { type: 'penup' },
+        { type: 'goto', arg1: -50, arg2: 0 },
+        { type: 'goto', arg1: 50, arg2: 0 }
+      ],
+      '2': [
+        { type: 'penup' },
+        { type: 'goto', arg1: -50, arg2: -50 },
+        { type: 'pendown' },
+        { type: 'goto', arg1: 50, arg2: 50 }
+      ],
+      '3': [
+        { type: 'goto', arg1: -50, arg2: 50 },
+        { type: 'pendown' },
+        { type: 'goto', arg1: -50, arg2: -50 },
+        { type: 'goto', arg1: 50, arg2: -50 }
+      ],
+      '4': [
+        { type: 'penup' },
+        { type: 'goto', arg1: -50, arg2: -50 },
+        { type: 'pendown' },
+        { type: 'goto', arg1: 0, arg2: 50 },
+        { type: 'goto', arg1: 50, arg2: -50 },
+        { type: 'goto', arg1: -50, arg2: -50 }
+      ],
+      '5': [
+        { type: 'penup' },
+        { type: 'goto', arg1: -50, arg2: 50 },
+        { type: 'pendown' },
+        { type: 'goto', arg1: 50, arg2: 50 },
+        { type: 'goto', arg1: 50, arg2: -50 },
+        { type: 'goto', arg1: -50, arg2: -50 },
+        { type: 'goto', arg1: -50, arg2: 50 }
+      ],
+      '6': [
+        { type: 'penup' },
+        { type: 'goto', arg1: -50, arg2: -50 },
+        { type: 'pendown' },
+        { type: 'goto', arg1: 0, arg2: 50 },
+        { type: 'goto', arg1: 50, arg2: -50 },
+        { type: 'penup' },
+        { type: 'goto', arg1: -25, arg2: 0 },
+        { type: 'pendown' },
+        { type: 'goto', arg1: 25, arg2: 0 }
+      ],
+      '7': [
+        { type: 'penup' },
+        { type: 'goto', arg1: -50, arg2: -50 },
+        { type: 'pendown' },
+        { type: 'goto', arg1: 50, arg2: -50 },
+        { type: 'goto', arg1: 50, arg2: 0 },
+        { type: 'goto', arg1: -50, arg2: 0 },
+        { type: 'goto', arg1: -50, arg2: -50 },
+        { type: 'penup' },
+        { type: 'goto', arg1: -50, arg2: 0 },
+        { type: 'pendown' },
+        { type: 'goto', arg1: 0, arg2: 50 },
+        { type: 'goto', arg1: 50, arg2: 0 }
+      ],
+      '9': [
+        { type: 'penup' },
+        { type: 'goto', arg1: 0, arg2: 100 },
+        { type: 'pendown' },
+        { type: 'goto', arg1: 100, arg2: 0 },
+        { type: 'goto', arg1: 0, arg2: -100 },
+        { type: 'goto', arg1: -100, arg2: 0 },
+        { type: 'goto', arg1: 0, arg2: 100 },
+        { type: 'penup' },
+        { type: 'goto', arg1: 0, arg2: 50 },
+        { type: 'pendown' },
+        { type: 'goto', arg1: 50, arg2: 0 },
+        { type: 'goto', arg1: 0, arg2: -50 },
+        { type: 'goto', arg1: -50, arg2: 0 },
+        { type: 'goto', arg1: 0, arg2: 50 }
+      ],
+      '10': [
+        { type: 'penup' },
+        { type: 'goto', arg1: 0, arg2: 100 },
+        { type: 'pendown' },
+        { type: 'goto', arg1: 70, arg2: 70 },
+        { type: 'goto', arg1: 100, arg2: 0 },
+        { type: 'goto', arg1: 70, arg2: -70 },
+        { type: 'goto', arg1: 0, arg2: -100 },
+        { type: 'goto', arg1: -70, arg2: -70 },
+        { type: 'goto', arg1: -100, arg2: 0 },
+        { type: 'goto', arg1: -70, arg2: 70 },
+        { type: 'goto', arg1: 0, arg2: 100 }
+      ]
+    };
+
+    if (presets[presetNum]) {
+      this.commands = presets[presetNum];
+      this.updateBuildWindow();
+      this.draw();
+    }
   }
 
   draw() {

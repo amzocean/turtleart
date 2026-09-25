@@ -11,6 +11,44 @@
         <header>
             <h1>🎨 Turtle Art Builder</h1>
             <p>Build your drawing by adding commands</p>
+            <div class="header-right">
+                <button id="presetsBtn" class="preset-btn">📋 Challenges</button>
+            </div>
+            
+            <!-- PIN Lock Modal -->
+            <div id="pinModal" class="pin-modal hidden">
+                <div class="pin-dialog">
+                    <h2>🔐 Challenges Locked</h2>
+                    <p>Enter PIN to unlock presets</p>
+                    <input type="password" id="pinInput" placeholder="PIN" maxlength="4">
+                    <div class="pin-buttons">
+                        <button id="pinSubmitBtn" class="action-btn primary">Unlock</button>
+                        <button id="pinCancelBtn" class="action-btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Presets Dropdown -->
+            <div id="presetsDropdown" class="presets-dropdown hidden">
+                <div class="presets-header">
+                    <h3>Challenge Sequence</h3>
+                    <button id="closePresetsBtn" class="close-btn">✕</button>
+                </div>
+                <div class="presets-list">
+                    <button class="preset-item" data-preset="1">1. Move Without Drawing</button>
+                    <button class="preset-item" data-preset="2">2. Draw One Line</button>
+                    <button class="preset-item" data-preset="3">3. Make an L</button>
+                    <button class="preset-item" data-preset="4">4. Make a Triangle</button>
+                    <button class="preset-item" data-preset="5">5. Make a Square</button>
+                    <button class="preset-item" data-preset="6">6. Draw the Letter A</button>
+                    <button class="preset-item" data-preset="7">7. Build a House</button>
+                    <button class="preset-item" data-preset="8">8. Design a Rocket</button>
+                    <button class="preset-item" data-preset="9">9. Nested Diamonds</button>
+                    <button class="preset-item" data-preset="10">10. Eight-Point Ring</button>
+                    <button class="preset-item" data-preset="11">11. Symmetric Pattern</button>
+                    <button class="preset-item" data-preset="12">12. Free-Design Coordinate Art</button>
+                </div>
+            </div>
         </header>
 
         <div class="main-layout">

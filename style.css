@@ -23,6 +23,7 @@ header {
     text-align: center;
     margin-bottom: 15px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
 
 header h1 {
@@ -35,6 +36,157 @@ header p {
     margin: 5px 0 0 0;
     color: #666;
     font-size: 0.95em;
+}
+
+.header-right {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+
+.preset-btn {
+    padding: 8px 12px;
+    font-size: 0.9em;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.preset-btn:hover {
+    background: #5568d3;
+}
+
+/* PIN Modal */
+.pin-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.pin-modal.hidden {
+    display: none;
+}
+
+.pin-dialog {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    min-width: 300px;
+}
+
+.pin-dialog h2 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.pin-dialog p {
+    margin: 0 0 15px 0;
+    color: #666;
+}
+
+.pin-dialog input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1.2em;
+    text-align: center;
+    letter-spacing: 10px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.pin-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.pin-buttons button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* Presets Dropdown */
+.presets-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    margin-top: 10px;
+    min-width: 280px;
+    max-height: 70vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.presets-dropdown.hidden {
+    display: none;
+}
+
+.presets-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.presets-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.1em;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    color: #666;
+}
+
+.presets-list {
+    overflow-y: auto;
+    max-height: 60vh;
+}
+
+.preset-item {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    text-align: left;
+    background: none;
+    cursor: pointer;
+    font-size: 0.95em;
+    color: #333;
+    transition: background 0.2s;
+}
+
+.preset-item:hover {
+    background: #f0f0f0;
+}
+
+.preset-item:active {
+    background: #e0e0e0;
 }
 
 .main-layout {
