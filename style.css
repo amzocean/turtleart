@@ -18,7 +18,7 @@ body {
 
 header {
     background: white;
-    padding: 15px 20px;
+    padding: 8px 20px;
     border-radius: 10px;
     text-align: center;
     margin-bottom: 15px;
@@ -29,19 +29,20 @@ header {
 header h1 {
     margin: 0;
     color: #333;
-    font-size: 2em;
+    font-size: 1.4em;
 }
 
 header p {
-    margin: 5px 0 0 0;
-    color: #666;
-    font-size: 0.95em;
+    display: none;
 }
 
 .header-right {
     position: absolute;
-    top: 15px;
+    top: 8px;
     right: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
 
 .preset-btn {
@@ -57,6 +58,19 @@ header p {
 
 .preset-btn:hover {
     background: #5568d3;
+}
+
+.preset-btn.small {
+    padding: 6px 10px;
+    font-size: 0.85em;
+}
+
+.preset-btn.small.danger {
+    background: #e74c3c;
+}
+
+.preset-btn.small.danger:hover {
+    background: #c0392b;
 }
 
 /* PIN Modal */

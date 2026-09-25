@@ -517,7 +517,9 @@ class TurtleArtBuilder {
     };
     
     for (const cmd of this.commands) {
-      if (cmd.type === 'goto') {
+      if (cmd.type === 'penup' || cmd.type === 'pendown') {
+        // penup/pendown don't move turtle, no bounds update
+      } else if (cmd.type === 'goto') {
         x = cmd.arg1;
         y = cmd.arg2;
         updateBounds(x, y);
@@ -532,6 +534,8 @@ class TurtleArtBuilder {
         heading += cmd.arg1;
       } else if (cmd.type === 'turnright') {
         heading -= cmd.arg1;
+      } else if (cmd.type === 'pencolor') {
+        // Color doesn't affect bounds
       }
     }
     
