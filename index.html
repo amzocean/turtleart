@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turtle Art Builder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎨 Turtle Art Builder</h1>
+            <p>Build your drawing by adding commands</p>
+        </header>
+
+        <div class="main-layout">
+            <!-- Left Panel: Command Builder -->
+            <div class="panel commands-panel">
+                <h2>Add Commands</h2>
+                
+                <div class="command-section">
+                    <button id="penUpBtn" class="cmd-btn wide">Pen Up</button>
+                    <button id="penDownBtn" class="cmd-btn wide">Pen Down</button>
+                </div>
+
+                <div class="command-section">
+                    <h3>Go To (X, Y)</h3>
+                    <div class="input-group">
+                        <label>X:</label>
+                        <input type="number" id="gotoX" value="0" min="-100" max="100">
+                    </div>
+                    <div class="input-group">
+                        <label>Y:</label>
+                        <input type="number" id="gotoY" value="0" min="-100" max="100">
+                    </div>
+                    <button id="gotoBtn" class="cmd-btn wide">Add Go To</button>
+                </div>
+
+                <div class="command-section">
+                    <h3>Pen Color</h3>
+                    <div class="color-grid">
+                        <button class="color-btn" data-color="black" style="background: black;" title="Black"></button>
+                        <button class="color-btn" data-color="red" style="background: red;" title="Red"></button>
+                        <button class="color-btn" data-color="blue" style="background: blue;" title="Blue"></button>
+                        <button class="color-btn" data-color="green" style="background: green;" title="Green"></button>
+                        <button class="color-btn" data-color="purple" style="background: purple;" title="Purple"></button>
+                        <button class="color-btn" data-color="orange" style="background: orange;" title="Orange"></button>
+                    </div>
+                </div>
+
+                <div class="command-section">
+                    <h3>Actions</h3>
+                    <button id="undoBtn" class="action-btn wide">↶ Undo Last</button>
+                    <button id="clearBtn" class="action-btn wide danger">🗑️ Clear All</button>
+                </div>
+            </div>
+
+            <!-- Center: Build & Python (stacked vertically) -->
+            <div class="center-stack">
+                <!-- Build Window -->
+                <div class="panel build-window">
+                    <h2>Build Window</h2>
+                    <div id="buildList" class="build-list"></div>
+                    <div id="emptyBuild" class="placeholder">Your commands will appear here...</div>
+                    <div class="build-controls">
+                        <button id="runBtn" class="action-btn primary wide">▶️ Run Drawing</button>
+                    </div>
+                </div>
+
+                <!-- Python Code -->
+                <div class="panel python-window">
+                    <h2>🐍 Python Code</h2>
+                    <p class="code-label">This is what older kids type:</p>
+                    <pre id="pythonCode" class="python-code"><code>import turtle
+
+t = turtle.Turtle()
+t.speed(0)</code></pre>
+                    <div class="python-controls">
+                        <button id="copyBtn" class="action-btn primary wide">📋 Copy Code</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Canvas Output -->
+            <div class="panel canvas-container">
+                <canvas id="canvas" width="500" height="500"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
