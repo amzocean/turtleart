@@ -432,6 +432,14 @@ class TurtleArtBuilder {
         { type: 'circle', arg1: 50 },
         { type: 'turnright', arg1: 30 },
         { type: 'circle', arg1: 50 }
+      ],
+      '17': [
+        { type: 'pendown' },
+        { type: 'circle', arg1: 30 },
+        { type: 'pencolor', arg1: 'red' },
+        { type: 'circle', arg1: 50 },
+        { type: 'pencolor', arg1: 'blue' },
+        { type: 'circle', arg1: 70 }
       ]
     };
 
