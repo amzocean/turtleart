@@ -486,24 +486,30 @@ class TurtleArtBuilder {
     this.ctx.lineTo(this.centerX, this.canvasHeight);
     this.ctx.stroke();
     
-    // Calculate bounding box of all drawn content
+    // Calculate bounding box by simulating all commands
     let minX = 0, maxX = 0, minY = 0, maxY = 0;
     let x = 0, y = 0;
     let heading = 0;
+    
+    const updateBounds = (px, py) => {
+      minX = Math.min(minX, px);
+      maxX = Math.max(maxX, px);
+      minY = Math.min(minY, py);
+      maxY = Math.max(maxY, py);
+    };
     
     for (const cmd of this.commands) {
       if (cmd.type === 'goto') {
         x = cmd.arg1;
         y = cmd.arg2;
+        updateBounds(x, y);
       } else if (cmd.type === 'circle') {
         const radius = cmd.arg1;
         const leftHeading = heading + 90;
         const centerX = x + radius * Math.cos(leftHeading * Math.PI / 180);
         const centerY = y + radius * Math.sin(leftHeading * Math.PI / 180);
-        minX = Math.min(minX, centerX - radius);
-        maxX = Math.max(maxX, centerX + radius);
-        minY = Math.min(minY, centerY - radius);
-        maxY = Math.max(maxY, centerY + radius);
+        updateBounds(centerX - radius, centerY - radius);
+        updateBounds(centerX + radius, centerY + radius);
       } else if (cmd.type === 'turnleft') {
         heading += cmd.arg1;
       } else if (cmd.type === 'turnright') {
@@ -524,8 +530,10 @@ class TurtleArtBuilder {
     const scaleX = (this.canvasWidth - 2 * padding) / width;
     const scaleY = (this.canvasHeight - 2 * padding) / height;
     this.scale = Math.min(scaleX, scaleY, 2.5); // Cap at 2.5 to not zoom in too far
-    this.centerX = this.canvasWidth / 2 - ((minX + maxX) / 2) * this.scale;
-    this.centerY = this.canvasHeight / 2 + ((minY + maxY) / 2) * this.scale;
+    
+    // Keep origin at center of canvas (don't shift center based on bounding box)
+    this.centerX = this.canvasWidth / 2;
+    this.centerY = this.canvasHeight / 2;
     
     // Execute commands with turtle state
     x = 0;
@@ -614,8 +622,8 @@ class TurtleArtBuilder {
 }
 
 // Initialize app
-let app;
+window.app;
 document.addEventListener('DOMContentLoaded', () => {
-  app = new TurtleArtBuilder();
+  window.app = new TurtleArtBuilder();
   app.draw();
 });
