@@ -478,13 +478,54 @@ class TurtleArtBuilder {
     this.ctx.lineTo(this.centerX, this.canvasHeight);
     this.ctx.stroke();
     
-    // Execute commands with turtle state
+    // Calculate bounding box of all drawn content
+    let minX = 0, maxX = 0, minY = 0, maxY = 0;
     let x = 0, y = 0;
-    let heading = 90; // 0=right, 90=up, 180=left, 270=down
-    let penIsDown = false;
+    let heading = 0;
+    
+    for (const cmd of this.commands) {
+      if (cmd.type === 'goto') {
+        x = cmd.arg1;
+        y = cmd.arg2;
+      } else if (cmd.type === 'circle') {
+        const radius = cmd.arg1;
+        const leftHeading = heading + 90;
+        const centerX = x + radius * Math.cos(leftHeading * Math.PI / 180);
+        const centerY = y + radius * Math.sin(leftHeading * Math.PI / 180);
+        minX = Math.min(minX, centerX - radius);
+        maxX = Math.max(maxX, centerX + radius);
+        minY = Math.min(minY, centerY - radius);
+        maxY = Math.max(maxY, centerY + radius);
+      } else if (cmd.type === 'turnleft') {
+        heading += cmd.arg1;
+      } else if (cmd.type === 'turnright') {
+        heading -= cmd.arg1;
+      }
+    }
+    
+    // Include turtle start position
+    minX = Math.min(minX, 0);
+    maxX = Math.max(maxX, 0);
+    minY = Math.min(minY, 0);
+    maxY = Math.max(maxY, 0);
+    
+    // Auto-zoom to fit with padding
+    const padding = 30;
+    const width = maxX - minX || 100;
+    const height = maxY - minY || 100;
+    const scaleX = (this.canvasWidth - 2 * padding) / width;
+    const scaleY = (this.canvasHeight - 2 * padding) / height;
+    this.scale = Math.min(scaleX, scaleY, 2.5); // Cap at 2.5 to not zoom in too far
+    this.centerX = this.canvasWidth / 2 - ((minX + maxX) / 2) * this.scale;
+    this.centerY = this.canvasHeight / 2 + ((minY + maxY) / 2) * this.scale;
+    
+    // Execute commands with turtle state
+    x = 0;
+    y = 0;
+    heading = 0;
+    let penIsDown = true; // Start with pen DOWN, like Python turtle
     let penColor = 'black';
     
-    this.ctx.strokeStyle = penColor;
     this.ctx.lineWidth = 2;
     this.ctx.lineCap = 'round';
     this.ctx.lineJoin = 'round';
@@ -515,10 +556,18 @@ class TurtleArtBuilder {
         y = newY;
       } else if (cmd.type === 'circle') {
         const radius = cmd.arg1;
-        this.drawCircle(x, y, radius, heading, penIsDown, penColor);
-        // After drawing circle, turtle moves along heading direction
-        x += radius * 2 * Math.cos((heading - 90) * Math.PI / 180);
-        y += radius * 2 * Math.sin((heading - 90) * Math.PI / 180);
+        // In real turtle graphics:
+        // - Turtle is ON the circumference at its current position
+        // - Circle center is one radius perpendicular LEFT of turtle's heading
+        // - After a full circle (360°), turtle returns to starting position
+        
+        // Center is perpendicular left from heading
+        const leftHeading = heading + 90;
+        const centerX = x + radius * Math.cos(leftHeading * Math.PI / 180);
+        const centerY = y + radius * Math.sin(leftHeading * Math.PI / 180);
+        
+        this.drawCircle(centerX, centerY, radius, heading, penIsDown, penColor);
+        // Turtle stays at same position after full circle
       } else if (cmd.type === 'turnleft') {
         heading += cmd.arg1;
       } else if (cmd.type === 'turnright') {
