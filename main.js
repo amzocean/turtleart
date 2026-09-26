@@ -528,9 +528,16 @@ class TurtleArtBuilder {
     // Use natural fit - scale to fit drawing in canvas with padding
     this.scale = Math.min(scaleX, scaleY);
     
-    // Position origin so the entire bounding box fits with padding
-    this.centerX = padding - minX * this.scale;
-    this.centerY = this.canvasHeight - padding + minY * this.scale;
+    // Position origin: center when no commands, else fit bounding box
+    if (this.commands.length === 0) {
+      // No commands - center origin at canvas middle
+      this.centerX = this.canvasWidth / 2;
+      this.centerY = this.canvasHeight / 2;
+    } else {
+      // Has commands - position to fit entire bounding box with padding
+      this.centerX = padding - minX * this.scale;
+      this.centerY = this.canvasHeight - padding + minY * this.scale;
+    }
     
      // NOW draw grid with correct scale after zoom is calculated
     // Dynamically determine grid spacing based on bounding box
