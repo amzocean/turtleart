@@ -129,7 +129,6 @@ class TurtleArtBuilder {
     });
     
     // Action buttons
-    document.getElementById('undoBtn').addEventListener('click', () => this.undo());
     document.getElementById('clearBtn').addEventListener('click', () => this.clear());
     document.getElementById('runBtn').addEventListener('click', () => this.run());
     document.getElementById('copyBtn').addEventListener('click', () => this.copyPython());
