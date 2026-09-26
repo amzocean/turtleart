@@ -472,6 +472,60 @@ class TurtleArtBuilder {
     this.ctx.fillStyle = '#ffffff';
     this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
     
+    // Calculate bounding box by simulating all commands
+    let minX = 0, maxX = 0, minY = 0, maxY = 0;
+    let x = 0, y = 0;
+    let heading = 0;
+    
+    const updateBounds = (px, py) => {
+      minX = Math.min(minX, px);
+      maxX = Math.max(maxX, px);
+      minY = Math.min(minY, py);
+      maxY = Math.max(maxY, py);
+    };
+    
+    for (const cmd of this.commands) {
+      if (cmd.type === 'penup' || cmd.type === 'pendown') {
+        // penup/pendown don't move turtle, no bounds update
+      } else if (cmd.type === 'goto') {
+        x = cmd.arg1;
+        y = cmd.arg2;
+        updateBounds(x, y);
+      } else if (cmd.type === 'circle') {
+        const radius = cmd.arg1;
+        const leftHeading = heading + 90;
+        const centerX = x + radius * Math.cos(leftHeading * Math.PI / 180);
+        const centerY = y + radius * Math.sin(leftHeading * Math.PI / 180);
+        updateBounds(centerX - radius, centerY - radius);
+        updateBounds(centerX + radius, centerY + radius);
+      } else if (cmd.type === 'turnleft') {
+        heading += cmd.arg1;
+      } else if (cmd.type === 'turnright') {
+        heading -= cmd.arg1;
+      } else if (cmd.type === 'pencolor') {
+        // Color doesn't affect bounds
+      }
+    }
+    
+    // Include turtle start position
+    minX = Math.min(minX, 0);
+    maxX = Math.max(maxX, 0);
+    minY = Math.min(minY, 0);
+    maxY = Math.max(maxY, 0);
+    
+    // Auto-zoom to fit with padding
+    const padding = 30;
+    const width = maxX - minX || 100;
+    const height = maxY - minY || 100;
+    const scaleX = (this.canvasWidth - 2 * padding) / width;
+    const scaleY = (this.canvasHeight - 2 * padding) / height;
+    this.scale = Math.min(scaleX, scaleY, 2.5); // Cap at 2.5 to not zoom in too far
+    
+    // Keep origin at center of canvas (don't shift center based on bounding box)
+    this.centerX = this.canvasWidth / 2;
+    this.centerY = this.canvasHeight / 2;
+    
+    // NOW draw grid with correct scale after zoom is calculated
     // Draw light grid
     this.ctx.strokeStyle = '#e8e8e8';
     this.ctx.lineWidth = 1;
@@ -552,59 +606,6 @@ class TurtleArtBuilder {
     this.ctx.textAlign = 'right';
     this.ctx.textBaseline = 'top';
     this.ctx.fillText('0', this.centerX - 8, this.centerY + 5);
-    
-    // Calculate bounding box by simulating all commands
-    let minX = 0, maxX = 0, minY = 0, maxY = 0;
-    let x = 0, y = 0;
-    let heading = 0;
-    
-    const updateBounds = (px, py) => {
-      minX = Math.min(minX, px);
-      maxX = Math.max(maxX, px);
-      minY = Math.min(minY, py);
-      maxY = Math.max(maxY, py);
-    };
-    
-    for (const cmd of this.commands) {
-      if (cmd.type === 'penup' || cmd.type === 'pendown') {
-        // penup/pendown don't move turtle, no bounds update
-      } else if (cmd.type === 'goto') {
-        x = cmd.arg1;
-        y = cmd.arg2;
-        updateBounds(x, y);
-      } else if (cmd.type === 'circle') {
-        const radius = cmd.arg1;
-        const leftHeading = heading + 90;
-        const centerX = x + radius * Math.cos(leftHeading * Math.PI / 180);
-        const centerY = y + radius * Math.sin(leftHeading * Math.PI / 180);
-        updateBounds(centerX - radius, centerY - radius);
-        updateBounds(centerX + radius, centerY + radius);
-      } else if (cmd.type === 'turnleft') {
-        heading += cmd.arg1;
-      } else if (cmd.type === 'turnright') {
-        heading -= cmd.arg1;
-      } else if (cmd.type === 'pencolor') {
-        // Color doesn't affect bounds
-      }
-    }
-    
-    // Include turtle start position
-    minX = Math.min(minX, 0);
-    maxX = Math.max(maxX, 0);
-    minY = Math.min(minY, 0);
-    maxY = Math.max(maxY, 0);
-    
-    // Auto-zoom to fit with padding
-    const padding = 30;
-    const width = maxX - minX || 100;
-    const height = maxY - minY || 100;
-    const scaleX = (this.canvasWidth - 2 * padding) / width;
-    const scaleY = (this.canvasHeight - 2 * padding) / height;
-    this.scale = Math.min(scaleX, scaleY, 2.5); // Cap at 2.5 to not zoom in too far
-    
-    // Keep origin at center of canvas (don't shift center based on bounding box)
-    this.centerX = this.canvasWidth / 2;
-    this.centerY = this.canvasHeight / 2;
     
     // Execute commands with turtle state
     x = 0;
