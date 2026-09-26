@@ -84,11 +84,15 @@ class TurtleArtBuilder {
     
     // Goto button
     document.getElementById('gotoBtn').addEventListener('click', () => {
-      const x = parseInt(document.getElementById('gotoX').value);
-      const y = parseInt(document.getElementById('gotoY').value);
-      this.addCommand('goto', x, y);
-      document.getElementById('gotoX').value = '0';
-      document.getElementById('gotoY').value = '0';
+      const xVal = document.getElementById('gotoX').value;
+      const yVal = document.getElementById('gotoY').value;
+      const x = xVal === '' ? 0 : parseInt(xVal);
+      const y = yVal === '' ? 0 : parseInt(yVal);
+      if (!isNaN(x) && !isNaN(y)) {
+        this.addCommand('goto', x, y);
+        document.getElementById('gotoX').value = '';
+        document.getElementById('gotoY').value = '';
+      }
     });
     
     // Circle button
