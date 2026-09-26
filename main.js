@@ -529,8 +529,11 @@ class TurtleArtBuilder {
     // Dynamically determine grid spacing based on bounding box
     const gridSize = Math.max(Math.abs(minX), Math.abs(maxX), Math.abs(minY), Math.abs(maxY));
     const gridStep = gridSize > 200 ? 100 : gridSize > 100 ? 50 : 25;
-    const gridMin = Math.floor(Math.min(minX, minY) / gridStep) * gridStep;
-    const gridMax = Math.ceil(Math.max(maxX, maxY) / gridStep) * gridStep;
+    
+    // Extend grid symmetrically to include all quadrants
+    const extendedRange = Math.ceil(gridSize / gridStep) * gridStep;
+    const gridMin = -extendedRange;
+    const gridMax = extendedRange;
     
     // Draw grid lines
     this.ctx.strokeStyle = '#d0d0d0';
