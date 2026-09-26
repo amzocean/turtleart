@@ -513,17 +513,15 @@ class TurtleArtBuilder {
     minY = Math.min(minY, 0);
     maxY = Math.max(maxY, 0);
     
-    // Auto-zoom to fit with padding, keeping drawing between 20-80% of canvas
+    // Auto-zoom to fit with padding
     const padding = 30;
     const width = maxX - minX || 100;
     const height = maxY - minY || 100;
     const scaleX = (this.canvasWidth - 2 * padding) / width;
     const scaleY = (this.canvasHeight - 2 * padding) / height;
     
-    // Constrain zoom so drawing takes 20-80% of canvas
-    const minScale = Math.min(0.2 * this.canvasWidth / width, 0.2 * this.canvasHeight / height);
-    const maxScale = Math.min(0.8 * this.canvasWidth / width, 0.8 * this.canvasHeight / height);
-    this.scale = Math.max(minScale, Math.min(scaleX, scaleY, maxScale));
+    // Use natural fit, but don't zoom in beyond 1.0 and don't zoom out below 0.5
+    this.scale = Math.max(0.5, Math.min(scaleX, scaleY, 1.0));
     
     // Keep origin at center of canvas (don't shift center based on bounding box)
     this.centerX = this.canvasWidth / 2;
