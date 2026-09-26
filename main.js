@@ -647,7 +647,7 @@ class TurtleArtBuilder {
     y = 0;
     heading = 0;
     let penIsDown = true; // Start with pen DOWN, like Python turtle
-    let penColor = 'black';
+    let penColor = this.currentColor; // Use current color, default is red
     
     this.ctx.lineWidth = 2;
     this.ctx.lineCap = 'round';
