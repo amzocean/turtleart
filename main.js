@@ -525,8 +525,8 @@ class TurtleArtBuilder {
     const scaleX = (this.canvasWidth - 2 * padding) / width;
     const scaleY = (this.canvasHeight - 2 * padding) / height;
     
-    // Use natural fit, but don't zoom in beyond 1.0 and don't zoom out below 0.5
-    this.scale = Math.max(0.5, Math.min(scaleX, scaleY, 1.0));
+    // Use natural fit - scale to fit drawing in canvas with padding
+    this.scale = Math.min(scaleX, scaleY);
     
     // Keep origin at center of canvas (don't shift center based on bounding box)
     this.centerX = this.canvasWidth / 2;
