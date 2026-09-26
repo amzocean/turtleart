@@ -87,6 +87,8 @@ class TurtleArtBuilder {
       const x = parseInt(document.getElementById('gotoX').value);
       const y = parseInt(document.getElementById('gotoY').value);
       this.addCommand('goto', x, y);
+      document.getElementById('gotoX').value = '';
+      document.getElementById('gotoY').value = '';
     });
     
     // Circle button
@@ -94,6 +96,7 @@ class TurtleArtBuilder {
       const radius = parseInt(document.getElementById('circleRadius').value);
       if (!isNaN(radius) && radius > 0) {
         this.addCommand('circle', radius);
+        document.getElementById('circleRadius').value = '';
       }
     });
     
@@ -102,6 +105,7 @@ class TurtleArtBuilder {
       const angle = parseInt(document.getElementById('turnAngle').value);
       if (!isNaN(angle)) {
         this.addCommand('turnleft', angle);
+        document.getElementById('turnAngle').value = '';
       }
     });
     
@@ -109,6 +113,7 @@ class TurtleArtBuilder {
       const angle = parseInt(document.getElementById('turnAngle').value);
       if (!isNaN(angle)) {
         this.addCommand('turnright', angle);
+        document.getElementById('turnAngle').value = '';
       }
     });
     
