@@ -526,22 +526,34 @@ class TurtleArtBuilder {
     this.centerY = this.canvasHeight / 2;
     
      // NOW draw grid with correct scale after zoom is calculated
-    // Draw only major grid every 50 units - cleaner and less cluttered
+    // Dynamically determine grid spacing based on bounding box
+    const gridSize = Math.max(Math.abs(minX), Math.abs(maxX), Math.abs(minY), Math.abs(maxY));
+    const gridStep = gridSize > 200 ? 100 : gridSize > 100 ? 50 : 25;
+    const gridMin = Math.floor(Math.min(minX, minY) / gridStep) * gridStep;
+    const gridMax = Math.ceil(Math.max(maxX, maxY) / gridStep) * gridStep;
+    
+    // Draw grid lines
     this.ctx.strokeStyle = '#d0d0d0';
     this.ctx.lineWidth = 1.5;
-    for (let i = -100; i <= 100; i += 50) {
+    for (let i = gridMin; i <= gridMax; i += gridStep) {
       const x = this.centerX + i * this.scale;
       const y = this.centerY - i * this.scale;
       
-      this.ctx.beginPath();
-      this.ctx.moveTo(x, 0);
-      this.ctx.lineTo(x, this.canvasHeight);
-      this.ctx.stroke();
+      // Vertical lines
+      if (x >= 0 && x <= this.canvasWidth) {
+        this.ctx.beginPath();
+        this.ctx.moveTo(x, 0);
+        this.ctx.lineTo(x, this.canvasHeight);
+        this.ctx.stroke();
+      }
       
-      this.ctx.beginPath();
-      this.ctx.moveTo(0, y);
-      this.ctx.lineTo(this.canvasWidth, y);
-      this.ctx.stroke();
+      // Horizontal lines
+      if (y >= 0 && y <= this.canvasHeight) {
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, y);
+        this.ctx.lineTo(this.canvasWidth, y);
+        this.ctx.stroke();
+      }
     }
     
     // Draw axes with labels
@@ -563,21 +575,25 @@ class TurtleArtBuilder {
     this.ctx.textAlign = 'center';
     this.ctx.textBaseline = 'top';
     
-    // X-axis labels
-    for (let i = -100; i <= 100; i += 50) {
+    // X-axis labels - use dynamic grid
+    for (let i = gridMin; i <= gridMax; i += gridStep) {
       if (i !== 0) {
         const x = this.centerX + i * this.scale;
-        this.ctx.fillText(i, x, this.centerY + 5);
+        if (x >= 0 && x <= this.canvasWidth) {
+          this.ctx.fillText(i, x, this.centerY + 5);
+        }
       }
     }
     
-    // Y-axis labels
+    // Y-axis labels - use dynamic grid
     this.ctx.textAlign = 'right';
     this.ctx.textBaseline = 'middle';
-    for (let i = -100; i <= 100; i += 50) {
+    for (let i = gridMin; i <= gridMax; i += gridStep) {
       if (i !== 0) {
         const y = this.centerY - i * this.scale;
-        this.ctx.fillText(i, this.centerX - 8, y);
+        if (y >= 0 && y <= this.canvasHeight) {
+          this.ctx.fillText(i, this.centerX - 8, y);
+        }
       }
     }
     
