@@ -473,8 +473,27 @@ class TurtleArtBuilder {
     this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
     
     // Draw light grid
-    this.ctx.strokeStyle = '#f0f0f0';
+    this.ctx.strokeStyle = '#e8e8e8';
     this.ctx.lineWidth = 1;
+    for (let i = -100; i <= 100; i += 10) {
+      const x = this.centerX + i * this.scale;
+      const y = this.centerY - i * this.scale;
+      
+      // Light grid every 10 units
+      this.ctx.beginPath();
+      this.ctx.moveTo(x, 0);
+      this.ctx.lineTo(x, this.canvasHeight);
+      this.ctx.stroke();
+      
+      this.ctx.beginPath();
+      this.ctx.moveTo(0, y);
+      this.ctx.lineTo(this.canvasWidth, y);
+      this.ctx.stroke();
+    }
+    
+    // Draw darker major grid every 50 units
+    this.ctx.strokeStyle = '#d0d0d0';
+    this.ctx.lineWidth = 1.5;
     for (let i = -100; i <= 100; i += 50) {
       const x = this.centerX + i * this.scale;
       const y = this.centerY - i * this.scale;
@@ -490,9 +509,9 @@ class TurtleArtBuilder {
       this.ctx.stroke();
     }
     
-    // Draw axes
-    this.ctx.strokeStyle = '#ddd';
-    this.ctx.lineWidth = 1;
+    // Draw axes with labels
+    this.ctx.strokeStyle = '#999';
+    this.ctx.lineWidth = 2;
     this.ctx.beginPath();
     this.ctx.moveTo(0, this.centerY);
     this.ctx.lineTo(this.canvasWidth, this.centerY);
@@ -502,6 +521,37 @@ class TurtleArtBuilder {
     this.ctx.moveTo(this.centerX, 0);
     this.ctx.lineTo(this.centerX, this.canvasHeight);
     this.ctx.stroke();
+    
+    // Add axis labels (coordinates)
+    this.ctx.fillStyle = '#666';
+    this.ctx.font = '12px Arial';
+    this.ctx.textAlign = 'center';
+    this.ctx.textBaseline = 'top';
+    
+    // X-axis labels
+    for (let i = -100; i <= 100; i += 50) {
+      if (i !== 0) {
+        const x = this.centerX + i * this.scale;
+        this.ctx.fillText(i, x, this.centerY + 5);
+      }
+    }
+    
+    // Y-axis labels
+    this.ctx.textAlign = 'right';
+    this.ctx.textBaseline = 'middle';
+    for (let i = -100; i <= 100; i += 50) {
+      if (i !== 0) {
+        const y = this.centerY - i * this.scale;
+        this.ctx.fillText(i, this.centerX - 8, y);
+      }
+    }
+    
+    // Origin label
+    this.ctx.fillStyle = '#999';
+    this.ctx.font = 'bold 12px Arial';
+    this.ctx.textAlign = 'right';
+    this.ctx.textBaseline = 'top';
+    this.ctx.fillText('0', this.centerX - 8, this.centerY + 5);
     
     // Calculate bounding box by simulating all commands
     let minX = 0, maxX = 0, minY = 0, maxY = 0;
