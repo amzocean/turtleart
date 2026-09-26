@@ -534,7 +534,13 @@ class TurtleArtBuilder {
     
      // NOW draw grid with correct scale after zoom is calculated
     // Dynamically determine grid spacing based on bounding box
-    const gridSize = Math.max(Math.abs(minX), Math.abs(maxX), Math.abs(minY), Math.abs(maxY));
+    let gridSize = Math.max(Math.abs(minX), Math.abs(maxX), Math.abs(minY), Math.abs(maxY));
+    
+    // When empty (no commands), default to showing -100 to 100 grid
+    if (gridSize === 0) {
+      gridSize = 100;
+    }
+    
     const gridStep = gridSize > 200 ? 100 : gridSize > 100 ? 50 : 25;
     
     // Extend grid symmetrically to include all quadrants
