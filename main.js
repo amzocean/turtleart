@@ -525,27 +525,8 @@ class TurtleArtBuilder {
     this.centerX = this.canvasWidth / 2;
     this.centerY = this.canvasHeight / 2;
     
-    // NOW draw grid with correct scale after zoom is calculated
-    // Draw light grid
-    this.ctx.strokeStyle = '#e8e8e8';
-    this.ctx.lineWidth = 1;
-    for (let i = -100; i <= 100; i += 10) {
-      const x = this.centerX + i * this.scale;
-      const y = this.centerY - i * this.scale;
-      
-      // Light grid every 10 units
-      this.ctx.beginPath();
-      this.ctx.moveTo(x, 0);
-      this.ctx.lineTo(x, this.canvasHeight);
-      this.ctx.stroke();
-      
-      this.ctx.beginPath();
-      this.ctx.moveTo(0, y);
-      this.ctx.lineTo(this.canvasWidth, y);
-      this.ctx.stroke();
-    }
-    
-    // Draw darker major grid every 50 units
+     // NOW draw grid with correct scale after zoom is calculated
+    // Draw only major grid every 50 units - cleaner and less cluttered
     this.ctx.strokeStyle = '#d0d0d0';
     this.ctx.lineWidth = 1.5;
     for (let i = -100; i <= 100; i += 50) {
