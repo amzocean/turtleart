@@ -6,12 +6,7 @@ class TurtleArtBuilder {
     
     // State
     this.commands = [];
-    this.currentColor = 'black';
-    
-    // Turtle state for rendering
-    this.turtleX = 0;
-    this.turtleY = 0;
-    this.turtleHeading = 90; // degrees, 90 = up/north
+    this.currentColor = 'red';
     this.penIsDown = true;
     
     // Canvas setup
@@ -152,9 +147,14 @@ class TurtleArtBuilder {
     
     if (type === 'pencolor') {
       this.currentColor = arg1;
+    } else if (type === 'penup') {
+      this.penIsDown = false;
+    } else if (type === 'pendown') {
+      this.penIsDown = true;
     }
     
     this.updateBuildWindow();
+    this.updateStatusDisplay();
     this.draw();
   }
 
@@ -170,8 +170,10 @@ class TurtleArtBuilder {
     if (this.commands.length > 0) {
       if (confirm('Clear all commands?')) {
         this.commands = [];
-        this.currentColor = 'black';
+        this.currentColor = 'red';
+        this.penIsDown = true;
         this.updateBuildWindow();
+        this.updateStatusDisplay();
         this.draw();
       }
     }
@@ -298,6 +300,15 @@ class TurtleArtBuilder {
     }).catch(() => {
       alert('Failed to copy. Please try again.');
     });
+  }
+
+  updateStatusDisplay() {
+    const statusEl = document.getElementById('penStatus');
+    if (statusEl) {
+      const penStatus = this.penIsDown ? 'DOWN' : 'UP';
+      const colorDisplay = `<span style="display:inline-block; width:16px; height:16px; background-color:${this.currentColor}; border:1px solid #333; margin-right:8px; vertical-align:middle;"></span>${this.currentColor.toUpperCase()}`;
+      statusEl.innerHTML = `✏️ Pen: ${penStatus} | Color: ${colorDisplay}`;
+    }
   }
 
   loadPreset(presetNum) {
@@ -721,5 +732,6 @@ class TurtleArtBuilder {
 window.app;
 document.addEventListener('DOMContentLoaded', () => {
   window.app = new TurtleArtBuilder();
+  app.updateStatusDisplay();
   app.draw();
 });
